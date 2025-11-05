@@ -210,9 +210,7 @@
       logical, parameter ::
      $   flag_screen = .true.,   
      $   flag_wrtres = .true.,  
-!!   $   flag_wrtout = .true.,   
      $   flag_wrtout = .false.,  
-!!   $   flag_wrtsiz = .true.,  
      $   flag_wrtsiz = .false., 
      $   flag_memest = .true., 
      $   flag_wrtnsj = .false.,  
@@ -300,7 +298,6 @@
 !     DEFAULT VALUES:
       data                      
      $   flag_prep   /.false./,
-!!   $   flag_wrtinp /.true./  
      $   flag_wrtinp /.false./ 
 !
 !     EXECUTABLE STATEMENTS: 
@@ -365,26 +362,12 @@
       allocate ( occ(nome,meiv), ecc(nome,meiv) )
       occ = 0.0_wrp 
       ecc = 0.0_wrp 
-!!    if ( flag_wrtout ) 
-!!   $   write(*,'(1x,a15,1x,i20)') 
-!!   $   'Ncol = Nrow =', nrow 
       iele = 0 
       do ir = 1_wip, ljj
          iele = iele + npairing ( njj(ir), nmns )
       enddo 
       nele = iele + nrow
       nnz  = 2*( nele - nrow ) + nrow
-!!    if ( flag_wrtout ) 
-!!   $   write(*,
-!!   $   '(/,a,/,1x,a15,1x,i20,/,3(1x,a15,1x,i20,1x,a,/))') 
-!!   $   'MATRIX INFORMATION:',
-!!   $   'Ncol = Nrow =', nrow, 
-!!   $   'Nele =', nele, 
-!!   $   '(No. Non-Zero elements of the half of H)', 
-!!   $   'NNZ =',  nnz, 
-!!   $   '(No. Non-Zero elements of H)',
-!!   $   'LJJ**2 - NNZ =', ljj*int(ljj,kind=wip) - nnz, 
-!!   $   '(No. Zeros of H)'
       nele = nele + 1 
       if ( flag_prep ) goto 201  
       allocate ( jah(nele) )
@@ -540,13 +523,6 @@
       endif 
  505  continue 
       write(iox,'(72("-"))') 
-!!    write(iox,'( 6(/,1x,a15,1x,i20) )') 
-!!   $   'NOME =', nome, 
-!!   $   'NPAR =', npar,
-!!   $   'NS   =', ns,
-!!   $   'LSJ  =', lsj, 
-!!   $   'LJJ  =', ljj, 
-!!   $   'NEIV =', meiv 
       write(iox, '( 3(/,1x,a15,1x,i20))') 
      $   'NOME =', nome, 
      $   'NPAR =', npar,
@@ -1053,7 +1029,6 @@
 !
 !              Use WORKD instead of AX.
 !
-!              workd := A@x   
                if ( g_is_matrix ) then  
                   call matvec_2_dp ( 
      $                 nrow, v(1,j), am, jm, workd(1) )
@@ -1061,16 +1036,10 @@
                   call matvec_1_dp ( 
      $                 nrow, v(1,j), am, jm, g_cons, workd(1) )
                endif 
-!
-!              workd := workd - lambda*x = A@x - lambda*x  
                call dpaxpy ( 
      $              nrow, -d(j,1), v(1,j), 1_wip, workd(1), 1_wip )
-!
-!              d(j,2) := ||workd|| = ||A@x - lambda*x|| 
                d(j,2) = dpnrm2 ( 
      $                  nrow, workd(1), 1_wip )
-!
-!              d(j,2) := ||A@x - lambda*x|| / |lambda|
                d(j,2) = d(j,2) / abs( d(j,1) )
 !               
             enddo 
@@ -1389,23 +1358,14 @@
 !
 !     Compute the residual norm ||A@x - lambda*x||/|lambda|: 
       do j = 1, nrow 
-!
-!        workd := A@x
          call dpsymv ( 
      $        'U', nrow, 1.0_wrp, amat, nrow, bmat(1,j), 1_wip,
      $        0.0_wrp, workd(1), 1_wip )
-!
-!        workd := workd - lambda*x = A@x - lambda*x  
          call dpaxpy ( 
      $        nrow, -eival(j), bmat(1,j), 1_wip, workd(1), 1_wip )
-!
-!        d(j) := ||workd|| = ||A@x - lambda*x|| 
          d(j) = dpnrm2 ( 
      $          nrow, workd(1), 1_wip )
-!
-!        d(j) := ||A@x - lambda*x|| / |lambda|
          d(j) = d(j) / abs( eival(j) )
-!               
       enddo 
       if ( flag_wrtout ) then 
          write(*,'(/)')
@@ -1443,11 +1403,11 @@
 !
 !     EXECUTABLE STATEMENTS:  
 !
-      t = s            ! t:   _____t1____.____t2___
-      y = x + e        ! y:              .____y1___ ____y2___
-      s = t + y        ! s:   _____t1____.__t2+y1__
-      r = t - s        ! r:              .___-y1___
-      e = r + y        ! e:              .          ____y2___
+      t = s      
+      y = x + e 
+      s = t + y
+      r = t - s 
+      e = r + y 
       return 
       end subroutine higham_sum_dp 
 !-----------------------------------------------------------------------
@@ -1662,9 +1622,7 @@
       logical, parameter ::
      $   flag_screen = .true.,   
      $   flag_wrtres = .true.,  
-!!   $   flag_wrtout = .true.,   
      $   flag_wrtout = .false.,  
-!!   $   flag_wrtsiz = .true.,  
      $   flag_wrtsiz = .false., 
      $   flag_memest = .true., 
      $   flag_wrtnsj = .false.,  
@@ -1752,7 +1710,6 @@
 !     DEFAULT VALUES:
       data                      
      $   flag_prep   /.false./,
-!!   $   flag_wrtinp /.true./  
      $   flag_wrtinp /.false./ 
 !
 !     EXECUTABLE STATEMENTS: 
@@ -1800,26 +1757,12 @@
       allocate ( occ(nome,meiv), ecc(nome,meiv) )
       occ = 0.0_wrp 
       ecc = 0.0_wrp 
-!!    if ( flag_wrtout ) 
-!!   $   write(*,'(1x,a15,1x,i20)') 
-!!   $   'Ncol = Nrow =', nrow 
       iele = 0 
       do ir = 1_wip, ljj
          iele = iele + npairing ( njj(ir), nmns )
       enddo 
       nele = iele + nrow
       nnz  = 2*( nele - nrow ) + nrow
-!!    if ( flag_wrtout ) 
-!!   $   write(*,
-!!   $   '(/,a,/,1x,a15,1x,i20,/,3(1x,a15,1x,i20,1x,a,/))') 
-!!   $   'MATRIX INFORMATION:',
-!!   $   'Ncol = Nrow =', nrow, 
-!!   $   'Nele =', nele, 
-!!   $   '(No. Non-Zero elements of the half of H)', 
-!!   $   'NNZ =',  nnz, 
-!!   $   '(No. Non-Zero elements of H)',
-!!   $   'LJJ**2 - NNZ =', ljj*int(ljj,kind=wip) - nnz, 
-!!   $   '(No. Zeros of H)'
       nele = nele + 1 
       if ( flag_prep ) goto 201  
       allocate ( jah(nele) )
@@ -1975,13 +1918,6 @@
       endif 
  505  continue 
       write(iox,'(72("-"))') 
-!!    write(iox,'( 6(/,1x,a15,1x,i20) )') 
-!!   $   'NOME =', nome, 
-!!   $   'NPAR =', npar,
-!!   $   'NS   =', ns,
-!!   $   'LSJ  =', lsj, 
-!!   $   'LJJ  =', ljj, 
-!!   $   'NEIV =', meiv 
       write(iox, '( 3(/,1x,a15,1x,i20))') 
      $   'NOME =', nome, 
      $   'NPAR =', npar,
@@ -2488,7 +2424,6 @@
 !
 !              Use WORKD instead of AX.
 !
-!              workd := A@x   
                if ( g_is_matrix ) then  
                   call matvec_2_qp ( 
      $                 nrow, v(1,j), am, jm, workd(1) )
@@ -2496,18 +2431,11 @@
                   call matvec_1_qp ( 
      $                 nrow, v(1,j), am, jm, g_cons, workd(1) )
                endif 
-!
-!              workd := workd - lambda*x = A@x - lambda*x  
                call qpaxpy ( 
      $              nrow, -d(j,1), v(1,j), 1_wip, workd(1), 1_wip )
-!
-!              d(j,2) := ||workd|| = ||A@x - lambda*x|| 
                d(j,2) = qpnrm2 ( 
      $                  nrow, workd(1), 1_wip )
-!
-!              d(j,2) := ||A@x - lambda*x|| / |lambda|
                d(j,2) = d(j,2) / abs( d(j,1) )
-!               
             enddo 
 !
 !            %-----------------------------%
@@ -2822,23 +2750,14 @@
 !
 !     Compute the residual norm ||A@x - lambda*x||/|lambda|: 
       do j = 1, nrow 
-!
-!        workd := A@x
          call qpsymv ( 
      $        'U', nrow, 1.0_wrp, amat, nrow, bmat(1,j), 1_wip,
      $        0.0_wrp, workd(1), 1_wip )
-!
-!        workd := workd - lambda*x = A@x - lambda*x  
          call qpaxpy ( 
      $        nrow, -eival(j), bmat(1,j), 1_wip, workd(1), 1_wip )
-!
-!        d(j) := ||workd|| = ||A@x - lambda*x|| 
          d(j) = qpnrm2 ( 
      $          nrow, workd(1), 1_wip )
-!
-!        d(j) := ||A@x - lambda*x|| / |lambda|
          d(j) = d(j) / abs( eival(j) )
-!               
       enddo 
       if ( flag_wrtout ) then 
          write(*,'(/)')
@@ -2874,11 +2793,11 @@
 !
 !     EXECUTABLE STATEMENTS:  
 !
-      t = s            ! t:   _____t1____.____t2___
-      y = x + e        ! y:              .____y1___ ____y2___
-      s = t + y        ! s:   _____t1____.__t2+y1__
-      r = t - s        ! r:              .___-y1___
-      e = r + y        ! e:              .          ____y2___
+      t = s      
+      y = x + e 
+      s = t + y 
+      r = t - s 
+      e = r + y 
       return 
       end subroutine higham_sum_qp 
 !-----------------------------------------------------------------------

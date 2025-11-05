@@ -255,7 +255,7 @@
          case('G')
             chval = trim(adjustl(chval))
             if ( len_trim(chval) .ne. 0 )  then 
-!!             g = constant 
+!!             g: constant 
                ng = 1 
                k = 1
                if ( flag_wrtinp )
@@ -266,7 +266,7 @@
                if ( flag_wrtinp )
      $            write(*,11) n, 'G =', g(1,1)
             else 
-!!             g = matrix  
+!!             g: matrix  
                ng = nome 
                if ( flag_wrtinp )
      $            write(*,10) n, 'NG =', ng  

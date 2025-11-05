@@ -650,15 +650,11 @@
 !     | Carry out the Implicitly restarted Lanczos Iteration. |
 !     %-------------------------------------------------------%
 !
-!!    write(*,'( A30, 3x, "ido =", i7)') "(before dpsaup2)",  ido 
-!
       call dpsaup2 ( 
      $     ido, bmat, n, which, nev0, np, tol, resid, mode, iupd,
      $     ishift, mxiter, v, ldv, workl(ih), ldh, workl(ritz),
      $     workl(bounds), workl(iq), ldq, workl(iw), ipntr, workd,
      $     info )
-!
-!!    write(*,'( A30, 3x, "ido =", i7)') "(after  dpsaup2)",  ido 
 !
 !     %--------------------------------------------------%
 !     | ido .ne. 99 implies use of reverse communication |
@@ -6835,9 +6831,6 @@
       include 'epcode_inc_dp.h'
 !
 !     ARGUMENTS:
-!     CHARACTER(len=6)   SRNAME 
-!@tqv:
-!!    character(len=7)   
       character(len=*)   
      $   srname 
       integer(wip)
@@ -6879,9 +6872,6 @@
       stop
 !
  9999 format ( 
-!    $   ' ** On entry to ', A6, ' parameter number ', I2, ' had ',
-!@tqv:
-!!!  $   ' ** on entry to ', a7, ' parameter number ', i2, ' had ',
      $   ' ** on entry to ', a,  ' parameter number ', i2, ' had ', 
      $   'an illegal value' )
       end subroutine wxerbla 
@@ -9420,12 +9410,6 @@
      $   dir, endd, i, j, start, stkpnt 
       real(wrp)   
      $   d1, d2, d3, dmnmx, tmp
-!
-!!    STACK: (to limits N to about 2**32)
-!!    integer(wip) 
-!!   $   stack ( 2, 32 )
-!
-!     STACK: (it limits N to about 2**62 < huge(1_wip) = 2**63-1 ???)
       integer(wip) 
      $   stack ( 2, 62 )
 !
@@ -14613,8 +14597,6 @@
 !
       wilaenv = 1
 !
-!@TQV:
-!!    SUBNAM = NAME
       subnam = sname(2:)
       subnam(1:1) = sname(1:1)
 !     Since in this case SNAME(1:1) = 's', 'd', or 'q', which is to 
@@ -14667,11 +14649,7 @@
          endif
       endif
 !
-!@TQV:
       c1 = subnam( 1:1 )
-!!    c1 = sname ( 1:1 )
-!!    SNAME = C1.EQ.'S' .OR. C1.EQ.'D'
-!!    lsnam = c1.eq.'S' .or. c1.eq.'D' .or. c1.eq.'F'
       lsnam = c1.eq.'S' .or. c1.eq.'D' .or. c1.eq.'Q'
 !     c1 = 
 !     s: single precision real kind (conventional def.)   

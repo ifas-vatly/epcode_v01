@@ -650,15 +650,11 @@
 !     | Carry out the Implicitly restarted Lanczos Iteration. |
 !     %-------------------------------------------------------%
 !
-!!    write(*,'( A30, 3x, "ido =", i7)') "(before qpsaup2)",  ido 
-!
       call qpsaup2 ( 
      $     ido, bmat, n, which, nev0, np, tol, resid, mode, iupd,
      $     ishift, mxiter, v, ldv, workl(ih), ldh, workl(ritz),
      $     workl(bounds), workl(iq), ldq, workl(iw), ipntr, workd,
      $     info )
-!
-!!    write(*,'( A30, 3x, "ido =", i7)') "(after  qpsaup2)",  ido 
 !
 !     %--------------------------------------------------%
 !     | ido .ne. 99 implies use of reverse communication |
@@ -9133,12 +9129,6 @@
      $   dir, endd, i, j, start, stkpnt 
       real(wrp)   
      $   d1, d2, d3, dmnmx, tmp
-!
-!!    STACK: (to limits N to about 2**32)
-!!    integer(wip) 
-!!   $   stack ( 2, 32 )
-!
-!     STACK: (it limits N to about 2**62 < huge(1_wip) = 2**63-1 ???)
       integer(wip) 
      $   stack ( 2, 62 )
 !
