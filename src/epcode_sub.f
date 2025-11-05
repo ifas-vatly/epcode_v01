@@ -235,7 +235,7 @@
      $   tmp 
       integer
      $   mjp_len, ljp, nps, nmns, lb1, i, i1, i2, isum, 
-     $   k, l, nt0, iox, ns 
+     $   k, l, nt0, iox, ns, k0, l0, p0  
       integer(wip)
      $   nrow, ncol, ir, ic, isj, ijj, ljj,
      $   nnz, iele, nele, jos, state_i, state_f,  
@@ -314,11 +314,28 @@
       g_is_matrix = ( ng .ne. 1 ) 
       if ( g_is_matrix ) then 
          g_diag = 0
-         g_matr = 0 
-         do k = 1, nome
-            do l = 1, nome
-               g_matr(l,k) = -g(l,k) 
+         g_matr = 0
+         if ( mod(npar,2) .eq. 0 ) then  
+            do k = 1, nome
+               do l = 1, nome
+                  g_matr(l,k) = -g(l,k) 
+               enddo
             enddo
+         else
+            p0 = (npar-1)/2 + 1
+            k0 = 0 
+            do k = 1, nome
+               if ( k .eq. p0 ) cycle
+               k0 = k0 + 1
+               l0 = 0 
+               do l = 1, nome
+                  if ( l .eq. p0 ) cycle 
+                  l0 = l0 + 1 
+                  g_matr(l0,k0) = -g(l,k) 
+               enddo
+            enddo
+         endif 
+         do k = 1, nome
             g_diag(k) = -g(k,k)
          enddo
       else 
